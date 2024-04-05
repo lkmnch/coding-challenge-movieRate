@@ -1,32 +1,13 @@
-import MovieList from "@/components/MovieList"
+import React from "react"
 
-export type MovieType = {
-	movieId: number
-	userId: number
-	title: string
-	description: string
-	release_year: number
-	movie_length: number
-	img: string
+function page() {
+	return (
+		<div className='flex justify-center align-middle  p-4 items-center'>
+			<span className='text-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl'>
+				Filme anlegen, bewerten und kommentieren!
+			</span>
+		</div>
+	)
 }
 
-//Funktion, um die Filme vom API-Endpoint zu holen mit REST-Methode GET
-async function getData() {
-	const res = await fetch("http://localhost:3001/api", {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-
-	if (!(res.status === 200)) {
-		throw new Error("Failed to fetch data")
-	}
-
-	return res.json()
-}
-
-export default async function Page() {
-	const movies = (await getData()) as MovieType[]
-	return <MovieList movies={movies} />
-}
+export default page
