@@ -68,7 +68,7 @@ function MovieCard({ movieData, ratings, comments }: MovieProps) {
 									id='CardImage'
 									src={
 										movie.img !== null
-											? movie.img
+											? `/posters/${movie.img}`
 											: "/defaults/defaultImage_film.png"
 									}
 									alt='Image of Movie Poster'
@@ -110,7 +110,7 @@ function MovieCard({ movieData, ratings, comments }: MovieProps) {
 											id='CardImage'
 											src={
 												movie.img !== null
-													? movie.img
+													? `/posters/${movie.img}`
 													: "/defaults/defaultImage_film.png"
 											}
 											alt='Image of Movie Poster'

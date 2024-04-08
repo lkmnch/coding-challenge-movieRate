@@ -28,13 +28,16 @@ export async function POST(req: Request, res: Response): Promise<Response> {
 		})
 	}
 	const movie = await req.json()
+	console.log("🚀 ~ POST ~ movie:", movie)
+
 	const result = await db.run(
-		"INSERT INTO movie (user_id, title, description, release_year, movie_length) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO movie (user_id, title, description, release_year, movie_length, img) VALUES (?, ?, ?, ?, ?,?)",
 		1,
 		movie.movieTitle,
 		movie.description,
 		movie.releaseYear,
-		movie.duration
+		movie.duration,
+		movie.filename
 	)
 	return new Response(JSON.stringify(result), {
 		headers: { "Content-Type": "application/json" },

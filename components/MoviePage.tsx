@@ -33,7 +33,11 @@ function MoviePage({
 		<div className='ms-2 me-2 mt-2'>
 			<div className='flex gap-4 items-center justify-between'>
 				<img
-					src={movie.img ? movie.img : "/defaults/defaultImage_film.png"}
+					src={
+						movie.img
+							? `/posters/${movie.img}`
+							: "/defaults/defaultImage_film.png"
+					}
 					alt='movie poster'
 					className='w-32 rounded-sm lg:w-48'
 				/>

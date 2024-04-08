@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -19,15 +19,17 @@ import { Button } from "./ui/button"
 import MoviePoster from "./MoviePoster"
 
 function AddMovie() {
+	const [file, setFile] = useState<File>()
+
 	const router = useRouter()
 
-	/* 	const MAX_FILE_SIZE = 5000000
+	const MAX_FILE_SIZE = 500000
 	const ACCEPTED_IMAGE_TYPES = [
 		"image/jpeg",
 		"image/jpg",
 		"image/png",
 		"image/webp",
-	] */
+	]
 
 	// Erstellung eines Validierungsschemas für das Filmformular
 	const formSchema = z.object({
@@ -43,14 +45,17 @@ function AddMovie() {
 		duration: z.coerce
 			.number()
 			.min(1, { message: "Film muss eine Länge haben" }),
-		movieImg: z.any().optional(),
-		/* .refine(
-				(file) => file?.size >= MAX_FILE_SIZE,
-				`Maximal Größe von 5mb überschritten.`
+		//movieImg: z.any(),
+		/* movieImg: z
+			.any()
+			.refine((files) => files instanceof File, "Filmposter wird benötigt")
+			.refine(
+				(files) => files?.[0]?.size <= MAX_FILE_SIZE,
+				`Maximal Größe von 5MB überschritten.`
 			)
 			.refine(
-				(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-				"Only .jpg, .jpeg, .png and .webp formats are supported."
+				(files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+				"Nur .jpg, .jpeg, .png und .webp werden unterstützt."
 			), */
 	})
 	// Verwendung von react-hook-form, um das Formular zu steuern und die Validierung durchzuführen
@@ -61,15 +66,24 @@ function AddMovie() {
 			description: "",
 			releaseYear: 0,
 			duration: 0,
-			movieImg: "",
 		},
 	})
+
 	// Funktion, um das Filmformular an den API-Endpunkt zu senden
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		if (!file) return
+		console.log(file?.name)
 		try {
+			const data = new FormData()
+			data.set("file", file)
+
+			const res2 = await fetch("http://localhost:3000/api/upload", {
+				method: "POST",
+				body: data,
+			})
 			const res = await fetch("http://localhost:3000/api/movies", {
 				method: "POST",
-				body: JSON.stringify(values),
+				body: JSON.stringify({ ...values, filename: file?.name }),
 			})
 			console.log("Movie added successfully")
 			router.push("/movies")
@@ -149,26 +163,30 @@ function AddMovie() {
 						</FormItem>
 					)}
 				/>
-				<FormField
-					disabled={true}
+				{/* <FormField
 					control={form.control}
 					name='movieImg'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel className='text-xl'>Filmposter</FormLabel>
-							<div className='flex gap-1'>
-								<FormControl>
-									<Input
-										type='file'
-										placeholder=''
-										className='resize-none'
-										{...field}
-									/>
-								</FormControl>
-							</div>
-							<FormMessage />
-						</FormItem>
-					)}
+					render={({ field }) => {
+						return (
+							<FormItem>
+								<FormLabel className='text-xl'>Filmposter</FormLabel>
+								<div className='flex gap-1'>
+									<FormControl>
+										<input type='file' className='resize-none' {...field} />
+									</FormControl>
+								</div>
+								<FormMessage />
+							</FormItem>
+						)
+					}}
+				/>
+ */}
+				<Input
+					type='file'
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+						setFile(e.target.files?.[0])
+					}
+					required={true}
 				/>
 				<Button type='submit'>Film hinzufügen</Button>
 			</form>

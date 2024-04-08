@@ -1,27 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
-import fs from "fs/promises"
-import path from "path"
+import path, { join } from "path"
+import { writeFile } from "fs/promises"
 
 // Funktion mit der ein Bild hochgeladen werden kann
 export async function POST(req: NextRequest) {
-	/*   try {
-    const formData = await req.formData();
-    const file = formData.get('file');
+	const data = await req.formData()
+	const file: File | null = data.get("file") as unknown as File
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-    }
+	if (!file) {
+		return NextResponse.json({ success: false })
+	}
 
-    const buffer = await file.arrayBuffer();
-    const fileName = file;
-    const filePath = path.join(process.cwd(), 'public', 'uploads', fileName);
+	const bytes = await file.arrayBuffer()
+	const buffer = Buffer.from(bytes)
 
-    await fs.mkdir(path.join(process.cwd(), 'public', 'uploads'), { recursive: true });
-    await fs.writeFile(filePath, Buffer.from(buffer));
-
-    return NextResponse.json({ message: 'File uploaded successfully' });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: 'Error uploading file' }, { status: 500 });
-  } */
+	const path = join(
+		"C:/Users/loukm/Desktop/projects/coding-challenge-movieRate/public/posters",
+		file.name
+	)
+	await writeFile(path, buffer)
+	console.log(`open ${path} to see the uploaded file`)
+	return NextResponse.json({ success: true })
 }
