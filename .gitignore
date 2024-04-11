@@ -1,32 +1,5 @@
-# Java
-*.class
-*.jar
-/target/
-/build/
-
-# C#
-bin/
-obj/
-*.exe
-*.dll
-*.pdb
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pyz
-*.pyw
-*.egg-info/
-dist/
-build/
-*.egg
 
 # TypeScript
 node_modules/
 dist/
-*.js
-*.js.map
-*.d.ts
 .next

@@ -23,13 +23,13 @@ function AddMovie() {
 
 	const router = useRouter()
 
-	const MAX_FILE_SIZE = 500000
+	/* 	const MAX_FILE_SIZE = 500000
 	const ACCEPTED_IMAGE_TYPES = [
 		"image/jpeg",
 		"image/jpg",
 		"image/png",
 		"image/webp",
-	]
+	] */
 
 	// Erstellung eines Validierungsschemas für das Filmformular
 	const formSchema = z.object({
@@ -77,11 +77,14 @@ function AddMovie() {
 			const data = new FormData()
 			data.set("file", file)
 
-			const res2 = await fetch("http://localhost:3000/api/upload", {
-				method: "POST",
-				body: data,
-			})
-			const res = await fetch("http://localhost:3000/api/movies", {
+			const uploadPosterResponse = await fetch(
+				"http://localhost:3000/api/upload",
+				{
+					method: "POST",
+					body: data,
+				}
+			)
+			const addMovieResponse = await fetch("http://localhost:3000/api/movies", {
 				method: "POST",
 				body: JSON.stringify({ ...values, filename: file?.name }),
 			})
